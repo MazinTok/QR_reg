@@ -1,29 +1,42 @@
 package com.mazinaltokhais.hajjhackathon;
 
+import com.mazinaltokhais.hajjhackathon.scan.*;
+
+import com.mazinaltokhais.hajjhackathon.scan.CodeScanner;
+import com.mazinaltokhais.hajjhackathon.scan.CodeScannerView;
+import com.mazinaltokhais.hajjhackathon.scan.DecodeCallback;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+//import android.support.annotation.NonNull;
+//import android.support.v4.app.ActivityCompat;
+//import android.support.v4.content.ContextCompat;
+//import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.budiyev.android.codescanner.CodeScanner;
-import com.budiyev.android.codescanner.CodeScannerView;
-import com.budiyev.android.codescanner.DecodeCallback;
+//import com.budiyev.android.codescanner.CodeScanner;
+//import com.budiyev.android.codescanner.CodeScannerView;
+//import com.budiyev.android.codescanner.DecodeCallback;
 import com.google.zxing.Result;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import static com.budiyev.android.codescanner.CodeScanner.CAMERA_FRONT;
 
 public class ScannerActivity extends AppCompatActivity {
 
     private CodeScanner mCodeScanner;
-
+    CodeScannerView scannerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanner);
-        CodeScannerView scannerView = (CodeScannerView)findViewById(R.id.scanner_view);
+        scannerView = findViewById(R.id.scanner_view);
 
 //        ActivityCompat.requestPermissions(this,
 //                new String[]{android.Manifest.permission.CAMERA},
@@ -40,7 +53,13 @@ public class ScannerActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions((Activity)this, new String[]{android.Manifest.permission.CAMERA}, 100);
             }
         }
-        mCodeScanner = new CodeScanner(this, scannerView);
+//        scannerView.setRotationX(150);
+        mCodeScanner = new CodeScanner(this, scannerView, CAMERA_FRONT );
+        mCodeScanner.setCamera(CAMERA_FRONT);
+
+
+//        scannerView.setRotationX(180);
+        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
         mCodeScanner.setDecodeCallback(new DecodeCallback() {
             @Override
             public void onDecoded(@NonNull final Result result) {
@@ -60,6 +79,7 @@ public class ScannerActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 mCodeScanner.startPreview();
+//                scannerView.setRotationX(180);
             }
         });
     }
